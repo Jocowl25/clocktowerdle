@@ -1,0 +1,18 @@
+{
+   "current":
+   {
+      "name":"Chef",
+         "originalScript":0,
+         "characterType":0,
+         "wakesInNight":2,
+         "selectsPlayer":0,
+         "learnsInfo":1,
+         "ability":[
+            9,
+            23,
+            15
+         ]
+      },
+
+   "history":["Librarian","Investigator"]
+}
