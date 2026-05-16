@@ -23,7 +23,7 @@ h2{
     flex-direction: column;
 }
 
-.submitGuess{
+.guessSubmit{
     cursor:pointer;
     border-radius:100px;
     height:50px;
@@ -36,7 +36,7 @@ h2{
     transition: transform 0.2s ease;
 }
 
-.submitGuess:hover:not(:active){
+.guessSubmit:hover:not(:active){
     transform: scale(108%);
 }
 
