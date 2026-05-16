@@ -1,1 +1,13 @@
-0.0010598129158927438
+{
+"name":"Chef",
+   "originalScript":0,
+   "characterType":0,
+   "wakesInNight":2,
+   "selectsPlayer":0,
+   "learnsInfo":1,
+   "ability":[
+      9,
+      23,
+      15
+   ]
+}
