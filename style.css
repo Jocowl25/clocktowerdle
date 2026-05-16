@@ -4,7 +4,7 @@ body{
     flex-direction: column;
     font-family: "Pirata One";
     padding-top:20px;
-background-image: url("parchment.webp");
+    background-image: url("parchment.webp");
 }
 
 h1{
@@ -113,6 +113,9 @@ Circle Template
     font-size:min(1.3vw,1.5em);
     overflow: hidden;
     line-height: 1;
+    transform: rotateY(90deg);
+    animation: rotate 0.2s linear;
+    animation-fill-mode: forwards;
 }
 
 .guess .name{
@@ -125,6 +128,14 @@ Circle Template
     
 }
 
+@keyframes rotate {
+    from{
+        transform: rotateY(90deg);
+    }
+    to{
+        transform: rotateY(0deg);
+    }
+}
 
 @media (max-width: 750px) {
 

@@ -1,25 +1,40 @@
 //TO DO: add half bag randomization
 
 const template=document.querySelector("template");
-let guessContainer=document.querySelector('.guessContainer');
-
-
+const guessContainer=document.querySelector('.guessContainer');
+const guestCountSpan=document.querySelector(".guessCount span");
+let answerJSON;
+let characterJSON;
+let guestCount=0;
 initialize();
+
+document.querySelector(".submitGuess").addEventListener("click",()=>{
+    createGuess();
+})
+
+
 async function initialize(){
-    let answerJSON=await getAnswer();
+    answerJSON=(await getJSONFile("input.json")).current;
+    characterJSON=(await getJSONFile("characters.json"));
+    console.log(characterJSON);
+}
+
+function createGuess(){
+    guestCount++;
+    document.querySelector(".guessCount span").innerHTML=guestCount;
+    //Create circles and apply animation
     let node=document.importNode(template.content,true);
+    let circles=node.querySelectorAll(".icon");
     guessContainer.prepend(node);
-    
-    node=document.importNode(template.content,true);
-    guessContainer.prepend(node);
-    
-    console.log(answerJSON);
+    circles.forEach((ele,i)=>{
+        ele.style.animationDelay=i/10+"s";
+    });
 }
 
 //Currently assumes input file only contains one clocktower character
-async function getAnswer(){
+async function getJSONFile(input){
     try{
-    const response=await fetch("input.txt");
+    const response=await fetch(input);
     const data=await response.text();
     return JSON.parse(data);
     }catch{
