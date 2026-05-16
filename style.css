@@ -104,11 +104,11 @@ Circle Template
     text-align:center;
     align-content: center;
     justify-content: center;
-    padding:20px;
+    padding:10px;
     color:white;
     background-color: grey;
     border-radius: 1000px;
-    border:3px solid black;
+    border:2px solid black;
     margin: none;
     font-size:min(1.3vw,1.5em);
     overflow: hidden;
@@ -201,10 +201,4 @@ Circle Template
 }
 
 
-.guess .evil{
-    color:red;
-}
 
-.guess .good{
-    color:blue;
-}
