@@ -1,0 +1,199 @@
+body{
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    font-family: "Pirata One";
+    padding-top:20px;
+background-image: url("parchment.webp");
+}
+
+h1{
+    font-size:50px;
+    color:#4f00b7;
+    text-shadow: 0 0 10px #828155;
+}
+
+h2{
+    font-weight: normal;
+}
+
+.selectionContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.submitGuess{
+    cursor:pointer;
+    border-radius:100px;
+    height:50px;
+    width:120px;
+    font-size:110%;
+    font-family: inherit;
+    background-color:blueviolet;
+    color:white;
+    border:2px solid black;
+    transition: transform 0.2s ease;
+}
+
+.submitGuess:hover:not(:active){
+    transform: scale(108%);
+}
+
+input{
+    width:400px;
+    aspect-ratio: 10/1;
+    font-size:25px;
+    padding-left:10px;
+    font-family: inherit;
+    border:2px solid black;
+    border-radius: 10px;
+    margin-bottom:20px;
+}
+
+.guessCount{
+    font-size:clamp(20px,2vw,25px);
+    color:#4d1f9c;
+}
+
+.bigLabels{
+    width:min(1000px,100vw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:-5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    gap:2px;
+    border-bottom: 2px solid black;
+}
+
+.header{
+    width:14%;
+    text-align:center;
+    align-content: center;
+    justify-content: center;
+    padding:20px;
+    padding-bottom:0px;
+    color:black;
+    margin: none;
+    font-size:14px;
+    overflow: hidden;
+    line-height: 1;
+    background-image: none !important;
+}
+
+/*
+Circle Template
+*/
+.guess{
+    width:min(1000px,100vw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    gap:2px;
+}
+
+.guess .icon{
+    background-position: center;
+    width:14%;
+    aspect-ratio: 1 / 1;
+    text-align:center;
+    align-content: center;
+    justify-content: center;
+    padding:20px;
+    color:white;
+    background-color: grey;
+    border-radius: 1000px;
+    border:3px solid black;
+    margin: none;
+    font-size:min(1.3vw,1.5em);
+    overflow: hidden;
+    line-height: 1;
+}
+
+.guess .name{
+    background-image: url("/token.webp");
+    background-position: center;
+    background-size: contain;
+    border: none;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    
+}
+
+
+@media (max-width: 750px) {
+
+    .bigLabels{
+        display: none;
+    }
+
+  .guess{
+    flex-wrap: wrap;
+  }
+    .guess > .icon{
+        width:20%;
+    }
+    .guess .break{
+        flex-basis: 100%;
+    }
+
+    .guess .icon{
+        font-size:3vw;
+        margin-top:50px;
+        position: relative;
+        overflow:visible;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+    
+    .guess .icon::before{
+        content: attr(data-type)"\A";
+        display: block;
+        position: absolute;
+        top:-20%;
+        width:100%;
+        left:0;
+        font-weight: bold;
+        color: black;
+        z-index:100;
+        text-align:center;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        font-size:120%;
+    }
+
+    .guess .name{
+        width:30%;
+        font-size:5vw;
+        margin-top:0;
+    }
+
+     .guess .name::before{
+        content: "";
+    }
+
+
+}
+
+.guess .almost{
+    background-color: #c8b653;
+}
+.guess .correct{
+    background-color: #6ca965;
+}
+
+
+.guess .evil{
+    color:red;
+}
+
+.guess .good{
+    color:blue;
+}

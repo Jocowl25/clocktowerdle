@@ -5,9 +5,190 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clocktowerdle</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
 </head>
 <body>   
-    <p>Hi</p>
+    <h1>Clocktowerdle</h1>
+    <div class="selectionContainer">
+        <h2>Choose a character:</h2>
+        <input list="characters"></input>
+        <button class="submitGuess">Make Guess</button>
+    </div>
+    <p class="guessCount">Guesses: <span>0</span></p>
+
+
+    <div class="bigLabels">
+        <div class="header name">Character</div>
+        <div class="header">Original Script</div>
+        <div class="header">Character Type</div>
+        <div class="header">Wakes in the Night</div>
+        <div class="header">Selects Player</div>
+        <div class="header">Learns Info</div>
+        <div class="header">Ability Details</div>    
+    </div>
+
+
+    <div class="guessContainer">
+    </div>
+    
+    <template>
+    <div class="guess">
+        <div class="icon name good"></div>
+        <div class="break"></div>
+        <div data-type="Original Script" class="icon">
+        </div>
+        <div data-type="Character Type" class="icon"></div>
+        <div data-type="Wakes in The Night" class="icon"></div>
+        <div data-type="Selects Player" class="icon"></div>
+        <div data-type="Learns Info" class="icon"></div>
+        <div data-type="Ability Details" class="icon"></div>
+    </div>
+    </template>
+
     <script src="index.js"></script>
 </body>
+
+
+
+<datalist id="characters">
+    <option value="Librarian"> Librarian </option>
+    <option value="Investigator"> Investigator </option>
+    <option value="Washerwoman"> Washerwoman </option>
+    <option value="Empath"> Empath </option>
+    <option value="Fortune Teller"> Fortune Teller </option>
+    <option value="Undertaker"> Undertaker </option>
+    <option value="Monk"> Monk </option>
+    <option value="Ravenkeeper"> Ravenkeeper </option>
+    <option value="Virgin"> Virgin </option>
+    <option value="Slayer"> Slayer </option>
+    <option value="Soldier"> Soldier </option>
+    <option  value="Mayor"> Mayor </option>
+    <option value="Butler"> Butler </option>
+    <option value="Saint"> Saint </option>
+    <option value="Recluse"> Recluse </option>
+    <option value="Drunk"> Drunk </option>
+    <option value="Poisoner"> Poisoner </option>
+    <option value="Spy"> Spy </option>
+    <option value="Baron"> Baron </option>
+    <option value="Scarlet Woman"> Scarlet Woman </option>
+    <option value="Imp"> Imp </option>
+    <option value="Clockmaker"> Clockmaker </option>
+    <option value="Dreamer"> Dreamer </option>
+    <option value="Snake Charmer"> Snake Charmer </option>
+    <option value="Mathematician"> Mathematician </option>
+    <option value="Flowergirl"> Flowergirl </option>
+    <option value="Town Crier"> Town Crier </option>
+    <option value="Oracle"> Oracle </option>
+    <option value="Savant"> Savant </option>
+    <option value="Seamstress"> Seamstress </option>
+    <option value="Philosopher"> Philosopher </option>
+    <option value="Artist"> Artist </option>
+    <option value="Juggler"> Juggler </option>
+    <option value="Sage"> Sage </option>
+    <option value="Mutant"> Mutant </option>
+    <option value="Sweetheart"> Sweetheart </option>
+    <option value="Barber"> Barber </option>
+    <option value="Klutz"> Klutz </option>
+    <option value="Evil Twin"> Evil Twin </option>
+    <option value="Witch"> Witch </option>
+    <option value="Cerenovus"> Cerenovus </option>
+    <option value="Pit Hag"> Pit Hag </option>
+    <option value="Fang Gu"> Fang Gu </option>
+    <option value="Vigormortis"> Vigormortis </option>
+    <option value="No Dashii"> No Dashii </option>
+    <option value="Vortox"> Vortox </option>
+    <option value="Grandmother"> Grandmother </option>
+    <option value="Sailor"> Sailor </option>
+    <option value="Chambermaid"> Chambermaid </option>
+    <option value="Exorcist"> Exorcist </option>
+    <option value="Innkeeper"> Innkeeper </option>
+    <option value="Gambler"> Gambler </option>
+    <option value="Gossip"> Gossip </option>
+    <option value="Courtier"> Courtier </option>
+    <option value="Professor"> Professor </option>
+    <option value="Minstrel"> Minstrel </option>
+    <option value="Tea Lady"> Tea Lady </option>
+    <option value="Pacifist"> Pacifist </option>
+    <option value="Fool"> Fool </option>
+    <option value="Goon"> Goon </option>
+    <option value="Lunatic"> Lunatic </option>
+    <option value="Tinker"> Tinker </option>
+    <option value="Moonchild"> Moonchild </option>
+    <option value="Godfather"> Godfather </option>
+    <option value="Devils Advocate"> Devils Advocate </option>
+    <option value="Assassin"> Assassin </option>
+    <option value="Mastermind"> Mastermind </option>
+    <option value="Zombuul"> Zombuul </option>
+    <option value="Pukka"> Pukka </option>
+    <option value="Shabaloth"> Shabaloth </option>
+    <option value="Po"> Po </option>
+    <option value="Acrobat"> Acrobat </option>
+    <option value="Alchemist"> Alchemist </option>
+    <option value="Alsaahir"> Alsaahir </option>
+    <option value="Amnesiac"> Amnesiac </option>
+    <option value="Atheist"> Atheist </option>
+    <option value="Balloonist"> Balloonist </option>
+    <option value="Banshee"> Banshee </option>
+    <option value="Bounty Hunter"> Bounty Hunter </option>
+    <option value="Cannibal"> Cannibal </option>
+    <option value="Choirboy"> Choirboy </option>
+    <option value="King"> King </option>
+    <option value="Cult Leader"> Cult Leader </option>
+    <option value="Engineer"> Engineer </option>
+    <option value="Farmer"> Farmer </option>
+    <option value="Fisherman"> Fisherman </option>
+    <option value="General"> General </option>
+    <option value="High Priestess"> High Priestess </option>
+    <option value="Huntsman"> Huntsman </option>
+    <option value="Knight"> Knight </option>
+    <option value="Lycanthrope"> Lycanthrope </option>
+    <option value="Magician"> Magician </option>
+    <option value="Nightwatchman"> Nightwatchman </option>
+    <option value="Noble"> Noble </option>
+    <option value="Pixie"> Pixie </option>
+    <option value="Poppy Grower"> Poppy Grower </option>
+    <option value="Preacher"> Preacher </option>
+    <option value="Princess"> Princess </option>
+    <option value="Shugenja"> Shugenja </option>
+    <option value="Steward"> Steward </option>
+    <option value="Village Idiot"> Village Idiot </option>
+    <option value="Damsel"> Damsel </option>
+    <option value="Golem"> Golem </option>
+    <option value="Hatter"> Hatter </option>
+    <option value="Heretic"> Heretic </option>
+    <option value="Hermit"> Hermit </option>
+    <option value="Ogre"> Ogre </option>
+    <option value="Plague Doctor"> Plague Doctor </option>
+    <option value="Politician"> Politician </option>
+    <option value="Puzzlemaster"> Puzzlemaster </option>
+    <option value="Snitch"> Snitch </option>
+    <option value="Zealot"> Zealot </option>
+    <option value="Boffin"> Boffin </option>
+    <option value="Boomdandy"> Boomdandy </option>
+    <option value="Fearmonger"> Fearmonger </option>
+    <option value="Goblin"> Goblin </option>
+    <option value="Harpy"> Harpy </option>
+    <option value="Marionette"> Marionette </option>
+    <option value="Mezepheles"> Mezepheles </option>
+    <option value="Organ Grinder"> Organ Grinder </option>
+    <option value="Psychopath"> Psychopath </option>
+    <option value="Summoner"> Summoner </option>
+    <option value="Vizier"> Vizier </option>
+    <option value="Widow"> Widow </option>
+    <option value="Wizard"> Wizard </option>
+    <option value="Wraith"> Wraith </option>
+    <option value="Xaan"> Xaan </option>
+    <option value="Al-Hadikhia"> Al-Hadikhia </option>
+    <option value="Kazali"> Kazali </option>
+    <option value="Legion"> Legion </option>
+    <option value="Leviathan"> Leviathan </option>
+    <option value="Lil Monsta"> Lil Monsta </option>
+    <option value="Lleech"> Lleech </option>
+    <option value="Lord Of Typhon"> Lord Of Typhon </option>
+    <option value="Ojo"> Ojo </option>
+    <option value="Riot"> Riot </option>
+    <option value="Yaggababble"> Yaggababble </option>
+</datalist>
 </html>

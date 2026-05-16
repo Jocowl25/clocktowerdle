@@ -1,9 +1,22 @@
+//TO DO: add half bag randomization
+
+const template=document.querySelector("template");
+let guessContainer=document.querySelector('.guessContainer');
+
+
 initialize();
 async function initialize(){
     let answerJSON=await getAnswer();
+    let node=document.importNode(template.content,true);
+    guessContainer.prepend(node);
+    
+    node=document.importNode(template.content,true);
+    guessContainer.prepend(node);
+    
     console.log(answerJSON);
 }
 
+//Currently assumes input file only contains one clocktower character
 async function getAnswer(){
     try{
     const response=await fetch("input.txt");
@@ -42,6 +55,6 @@ function getAbility(input){
         case 22:return"Can Revive";
         case 23:return"Positioning";
         case 24:return"Storyteller";
-        case 25:return"?"
+        case 25:return"?";
     }
 }
