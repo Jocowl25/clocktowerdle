@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    runs-on: github
+    runs-on: ubuntu-latest
     steps:
 
       - name: checkout repo content
