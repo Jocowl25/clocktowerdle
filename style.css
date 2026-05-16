@@ -17,13 +17,42 @@ h2{
     font-weight: normal;
 }
 
+.completeContainer{
+    max-height:0;
+    display:block;
+    opacity: 0;
+    transition:all 3s ease-out 0.8s;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-bottom:20px;
+}
+
+.completeContainer button{
+    margin-top: 20px;
+    width:150px;
+    height:50px;
+}
+
+.emoji{
+    align-items: center;
+    text-align: center;
+    line-height: 1.5;
+}
+
 .selectionContainer{
+    max-height:265px;
+    opacity: 100%;
+    transition:all 1s;
     display: flex;
     align-items: center;
     flex-direction: column;
 }
+   
 
-.guessSubmit{
+button{
     cursor:pointer;
     border-radius:100px;
     height:50px;
@@ -36,8 +65,8 @@ h2{
     transition: transform 0.2s ease;
 }
 
-.guessSubmit:hover:not(:active){
-    transform: scale(108%);
+button:hover:not(:active){
+    transform: scale(103%);
 }
 
 input{
@@ -177,7 +206,7 @@ Circle Template
         align-items: center;
         align-content: center;
         justify-content: center;
-        font-size:120%;
+        font-size:110%;
     }
 
     .guess .name{

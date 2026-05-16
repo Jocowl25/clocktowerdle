@@ -11,12 +11,17 @@
 </head>
 <body>   
     <h1>Clocktowerdle</h1>
+    <div class="completeContainer">
+        <h2>Congratulations! <br> You guessed </h2>
+        <div class="emoji"></div>
+        <button>Share Result</button>
+    </div>
     <div class="selectionContainer">
         <h2>Choose a character:</h2>
         <input list="characters"></input>
         <button class="guessSubmit">Make Guess</button>
+        <p class="guessCount">Guesses: <span>0</span></p>
     </div>
-    <p class="guessCount">Guesses: <span>0</span></p>
 
 
     <div class="bigLabels">
@@ -41,6 +46,7 @@
         </div>
         <div data-type="Character Type" class="icon"></div>
         <div data-type="Wakes in The Night" class="icon"></div>
+                <div class="break"></div>
         <div data-type="Selects Player" class="icon"></div>
         <div data-type="Learns Info" class="icon"></div>
         <div data-type="Ability Details" class="icon"></div>

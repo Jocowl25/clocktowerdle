@@ -2,6 +2,7 @@ const template=document.querySelector("template");
 const guessContainer=document.querySelector('.guessContainer');
 const guestCountSpan=document.querySelector(".guessCount span");
 const inputHTML=document.querySelector("input")
+const guessHistory=[];
 let answer;
 let characterJSON;
 let previouslyGuessedSet=new Set();
@@ -51,6 +52,9 @@ function createGuess(name,character){
     if(character.originalScript==answer.originalScript){
         circles[1].classList.add("correct")
         correct++
+        guessHistory.push("🟩")
+    }else{
+        guessHistory.push("⬛")
     }
 
     //Character type
@@ -59,10 +63,14 @@ function createGuess(name,character){
     if(character.characterType==answer.characterType){
         circles[2].classList.add("correct")
         correct++
+        guessHistory.push("🟩")
     }else if(
     (character.characterType<2&&answer.characterType<2)||
     (character.characterType>=2&&answer.characterType>=2)){
         circles[2].classList.add("almost")
+        guessHistory.push("🟨")
+    }else{
+        guessHistory.push("⬛")
     }
 
     //Wakes in night
@@ -70,8 +78,12 @@ function createGuess(name,character){
     if(character.wakesInNight==answer.wakesInNight){
         circles[3].classList.add("correct")
         correct++
+        guessHistory.push("🟩")
     }else if(wakesInNightMatch(character)){
         circles[3].classList.add("almost");
+        guessHistory.push("🟨")
+    }else{
+        guessHistory.push("⬛")
     }
 
 
@@ -80,8 +92,12 @@ function createGuess(name,character){
     if(character.selectsPlayer==answer.selectsPlayer){
         circles[4].classList.add("correct")
         correct++
+        guessHistory.push("🟩")
     }else if(selectsPlayerMatch(character)){
         circles[4].classList.add("almost");
+        guessHistory.push("🟨")
+    }else{
+        guessHistory.push("⬛")
     }
 
     //Learns info
@@ -89,22 +105,29 @@ function createGuess(name,character){
     if(character.learnsInfo==answer.learnsInfo){
         circles[5].classList.add("correct")
         correct++
+        guessHistory.push("🟩")
+    }else{
+        guessHistory.push("⬛")
     }
 
     //Ability Details
     let charAbilities=new Set(character.ability)
     let answerAbilities=new Set(answer.ability)
     for (const value of charAbilities) {
-        console.log(value)
         circles[6].innerHTML+=getAbility(value)+", ";
     }
     circles[6].innerHTML=circles[6].innerHTML.slice(0,-2)
+    
     let sameValues=charAbilities.intersection(answerAbilities)
     if(areSetsEqual(charAbilities,answerAbilities)){
         circles[6].classList.add("correct")
         correct++
+        guessHistory.push("🟩")
     }else if(sameValues.size!=0){
         circles[6].classList.add("almost")
+        guessHistory.push("🟨")
+    }else{
+        guessHistory.push("⬛")
     }
     circles[6].innerHTML+=` [${sameValues.size}]`
 
@@ -112,9 +135,53 @@ function createGuess(name,character){
     circles.forEach((ele,i)=>{
         ele.style.animationDelay=i/10+"s";
     });
+
+    if(correct==6){
+        window.setTimeout(showWin,1000)
+    }
 }
 
+function showWin(){
+    selectionCont=document.querySelector(".selectionContainer")
+    selectionCont.style.maxHeight=0;
+    selectionCont.style.opacity=0;
+    selectionCont.querySelector("input").disabled=true;
+    selectionCont.querySelector("button").disabled=true;
 
+    completeCont=document.querySelector(".completeContainer");
+    completeCont.style.maxHeight="500px";
+    completeCont.style.opacity="100%";
+
+    guestCount==1 ? endString="" : endString="es"
+    endString=`${guestCount} guess${endString}`;
+    completeCont.querySelector("h2").innerHTML+=`${answer.name} in ${endString}!`;
+
+    emojiDiv=completeCont.querySelector(".emoji");
+    console.log(guessHistory)
+    for(let i=0;i<guessHistory.length;i++){
+        if(i%6==0&&i!=0){
+            emojiDiv.innerHTML+="<br>"
+        }
+        emojiDiv.innerHTML+=guessHistory[i];
+    }
+
+    document.querySelector(".completeContainer button").addEventListener("click",()=>{
+        let text=emojiDiv.innerHTML;
+        text=text.replaceAll("<br>","\r\n")
+        text=`🕰️🩸 I Guessed the Character in Clocktowerdle in ${endString}! 🩸🕰️\r\n`+text;
+        text+="\r\nhttps://jocowl25.github.io/clocktowerdle/";
+        copyToClipboard(text)
+    })
+}
+
+async function copyToClipboard(text){
+  try {
+    await navigator.clipboard.writeText(text);
+    alert('Copied to clipboard!');
+  } catch (err) {
+    console.error('Failed to copy: ', err);
+  }
+}
 
 function selectsPlayerMatch(character){
     if(character.selectsPlayer==3||answer.selectsPlayer==3){
