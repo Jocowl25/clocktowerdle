@@ -4,15 +4,31 @@ const fakeGuessContainer=document.querySelector('.fakeGuessContainer');
 const guestCountSpan=document.querySelector(".guessCount span");
 const inputMain=document.querySelector("input.main")
 const inputTest=document.querySelector("input.test")
-const guessHistory=[];
+const colorHistory=[];
 let answer;
 let answerName;
 let characterJSON;
 let previouslyGuessedSet=new Set();
 let previouslyTestedSet=new Set();
-
 let guessCount=0;
+
+let characterHistory=[];
 initialize();
+
+
+async function initialize(){
+    characterJSON=(await getJSONFile("characters.json"));
+    answerName=decrypt((await getJSONFile("answer.json")).current)
+    answer=characterJSON[answerName];
+    
+    let localHistory=localStorage.getItem("history")
+    if(localHistory!=null){
+        characterHistory=localHistory.split(",");
+        for(let i=0;i<characterHistory.length;++i){
+            createGuess(true,characterHistory[i])
+        }
+    }
+}
 
 const mod = (n, m) => ((n % m) + m) % m;
 
@@ -46,20 +62,28 @@ inputTest.addEventListener("keydown",(e)=>{
     }
 })
 
-function createGuess(full){
+function createGuess(full,recap=false){
     let inputHTML;
-    let prevSet;
-    if(full){
-        inputHTML=inputMain;
-        prevSet=previouslyGuessedSet
+    let prevSet=new Set();
+    let inputValue
+    if(recap){
+        inputValue=recap;
     }else{
-        inputHTML=inputTest;
-        prevSet=previouslyTestedSet
+        if(full){
+            inputHTML=inputMain;
+            prevSet=previouslyGuessedSet
+        }else{
+            inputHTML=inputTest;
+            prevSet=previouslyTestedSet
+        }
+        inputValue=inputHTML.value;
     }
-    let name=toTitleCase(inputHTML.value).trim();
+    let name=toTitleCase(inputValue).trim();
     if(name in characterJSON && !(prevSet.has(name))){
         prevSet.add(name);
-        inputHTML.value="";
+        if(!recap){
+            inputHTML.value="";
+        }
         let character=characterJSON[name];
 
         //Create circles
@@ -78,7 +102,18 @@ function createGuess(full){
 
         if(full){
             guestCountSpan.innerHTML=++guessCount;
-            validateGuess(circles,character,name)
+            let totalCorrect=validateGuess(circles,character,name)
+            if(totalCorrect==6){
+                if(recap){
+                    showWin()
+                }else{
+                    window.setTimeout(showWin,1000)
+                }
+            }   
+            if(!recap){
+                characterHistory.push(name)
+                localStorage.setItem("history",characterHistory.join(","))
+            }
         }
 
         //Apply animation delay + set circle color
@@ -118,12 +153,6 @@ function addText(circles,character,name){
     circles[6].innerHTML=circles[6].innerHTML.slice(0,-2)
 }
 
-async function initialize(){
-    characterJSON=(await getJSONFile("characters.json"));
-    answerName=decrypt((await getJSONFile("answer.json")).current)
-    answer=characterJSON[answerName];
-}
-
 function decrypt(word){
     const alphabet="qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- ".split("")
     const cShift=17
@@ -140,13 +169,13 @@ function decrypt(word){
 function compareCircles(circle,character,checks){
     if(checks[0]){
         circle.classList.add("correct")
-        guessHistory.push("🟩")
+        colorHistory.push("🟩")
         return 1
     }else if(checks[1]){
         circle.classList.add("almost")
-        guessHistory.push("🟨")
+        colorHistory.push("🟨")
     }else{
-        guessHistory.push("⬛")
+        colorHistory.push("⬛")
     }
     return 0
 }
@@ -189,9 +218,7 @@ function validateGuess(circles,character,name){
 
     circles[6].innerHTML+=` [${sameValues.size}]`
 
-    if(correct==6){
-        window.setTimeout(showWin,1000)
-    }
+    return correct;
 }
 
 function selectsPlayerMatch(character){
@@ -228,12 +255,11 @@ function showWin(){
     completeCont.querySelector("h2").innerHTML+=`${answerName} in ${endString}!`;
 
     emojiDiv=completeCont.querySelector(".emoji");
-    console.log(guessHistory)
-    for(let i=0;i<guessHistory.length;i++){
+    for(let i=0;i<colorHistory.length;i++){
         if(i%6==0&&i!=0){
             emojiDiv.innerHTML+="<br>"
         }
-        emojiDiv.innerHTML+=guessHistory[i];
+        emojiDiv.innerHTML+=colorHistory[i];
     }
 
     document.querySelector(".completeContainer button").addEventListener("click",()=>{
