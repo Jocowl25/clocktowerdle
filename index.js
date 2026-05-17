@@ -9,13 +9,23 @@ let answer;
 let answerName;
 let characterJSON;
 let previouslyGuessedSet=new Set();
-let previouslytestedSet=new Set();
+let previouslyTestedSet=new Set();
 
 let guestCount=0;
 initialize();
 
 const areSetsEqual = (a, b) => 
   a.size === b.size && [...a].every(value => b.has(value));
+
+inputMain.addEventListener("keydown",(key)=>{
+    if(key="Enter"){
+        let name=toTitleCase(inputMain.value);
+        if(name in characterJSON && !(previouslyGuessedSet.has(name))){
+            previouslyGuessedSet.add(name)
+            createGuess(name,characterJSON[name]);
+        }
+    }
+})
 
 document.querySelector(".guessSubmit").addEventListener("click",()=>{
     let name=toTitleCase(inputMain.value);
@@ -25,10 +35,18 @@ document.querySelector(".guessSubmit").addEventListener("click",()=>{
     }
 })
 
-document.querySelector(".fakeGuessSubmit").addEventListener("click",()=>{
+document.querySelector(".fakeGuessSubmit").addEventListener("click",testGuess)
+inputTest.addEventListener("keydown",(key)=>{
+    if(key="Enter"){
+        testGuess();
+    }
+})
+
+
+function testGuess(){
     let name=toTitleCase(inputTest.value);
-    if(name in characterJSON && !(previouslytestedSet.has(name))){
-        previouslytestedSet.add(name)
+    if(name in characterJSON && !(previouslyTestedSet.has(name))){
+        previouslyTestedSet.add(name)
         inputTest.value="";
         character=characterJSON[name]
 
@@ -67,8 +85,7 @@ document.querySelector(".fakeGuessSubmit").addEventListener("click",()=>{
             ele.style.backgroundColor="darkgrey"
         });
     }
-})
-
+}
 
 async function initialize(){
     characterJSON=(await getJSONFile("characters.json"));
