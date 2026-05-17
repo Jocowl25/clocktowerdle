@@ -15,77 +15,105 @@ let guestCount=0;
 initialize();
 
 const mod = (n, m) => ((n % m) + m) % m;
+
 const areSetsEqual = (a, b) => 
   a.size === b.size && [...a].every(value => b.has(value));
 
-inputMain.addEventListener("keydown",(key)=>{
-    if(key=="Enter"){
-        let name=toTitleCase(inputMain.value).trim();
-        if(name in characterJSON && !(previouslyGuessedSet.has(name))){
-            previouslyGuessedSet.add(name)
-            createGuess(name,characterJSON[name]);
-        }
+function toTitleCase(str) {
+  return str.toLowerCase().replace(/(?:^|[\s-/])\w/g, function(match) {
+    return match.toUpperCase();
+  });
+}
+
+inputMain.addEventListener("keydown",(e)=>{
+    if(e.key=="Enter"){
+        console.log("eee")
+            createGuess(true);
     }
 })
 
 document.querySelector(".guessSubmit").addEventListener("click",()=>{
-    let name=toTitleCase(inputMain.value).trim();
-    if(name in characterJSON && !(previouslyGuessedSet.has(name))){
-        previouslyGuessedSet.add(name)
-        createGuess(name,characterJSON[name]);
+        createGuess(true);
+})
+
+document.querySelector(".fakeGuessSubmit").addEventListener("click",()=>{
+    createGuess(false)
+})
+
+inputTest.addEventListener("keydown",(e)=>{
+    if(e.key=="Enter"){
+        createGuess(false);
     }
 })
 
-document.querySelector(".fakeGuessSubmit").addEventListener("click",testGuess)
-inputTest.addEventListener("keydown",(key)=>{
-    if(key=="Enter"){
-        testGuess();
+function createGuess(full){
+    let inputHTML;
+    let prevSet;
+    if(full){
+        inputHTML=inputMain;
+        prevSet=previouslyGuessedSet
+    }else{
+        inputHTML=inputTest;
+        prevSet=previouslyTestedSet
     }
-})
-
-
-function testGuess(){
-    let name=toTitleCase(inputTest.value).trim();
-    if(name in characterJSON && !(previouslyTestedSet.has(name))){
-        previouslyTestedSet.add(name)
-        inputTest.value="";
-        character=characterJSON[name]
+    let name=toTitleCase(inputHTML.value).trim();
+    if(name in characterJSON && !(prevSet.has(name))){
+        prevSet.add(name);
+        inputHTML.value="";
+        let character=characterJSON[name];
 
         //Create circles
         let node=document.importNode(template.content,true);
         let circles=node.querySelectorAll(".icon");
-        fakeGuessContainer.prepend(node);
-
-        //Name
-        circles[0].innerHTML=name;
-        if(character.characterType<2){
-            circles[0].style.color="blue"
+        if(full){
+            document.querySelector(".bigLabels").classList.remove("hide");
+            guessContainer.prepend(node);
         }else{
-            circles[0].style.color="red"
+            fakeGuessContainer.prepend(node);
+        }
+        
+        addText(circles,character,name)
+
+        if(full){
+            guestCountSpan.innerHTML=++guestCount;
+            validateGuess(circles,character,name)
         }
 
-        //Script type
-        circles[1].innerHTML=getScript(character.originalScript);
-        //Character type
-        circles[2].innerHTML=getCharType(character.characterType);
-        //Wakes in night
-        circles[3].innerHTML=getWakesNight(character.wakesInNight);
-        //Selects Player
-        circles[4].innerHTML=getSelectsPlayer(character.selectsPlayer);
-        //Learns info
-        circles[5].innerHTML=getLearnsInfo(character.learnsInfo);
-        //Ability Details
-        let charAbilities=new Set(character.ability)
-        for (const value of charAbilities) {
-            circles[6].innerHTML+=getAbility(value)+", ";
-        }
-        circles[6].innerHTML=circles[6].innerHTML.slice(0,-2)
-        //Apply animation delay + change circle color
+        //Apply animation delay + set circle color
         circles.forEach((ele,i)=>{
             ele.style.animationDelay=i/10+"s";
-            ele.style.backgroundColor="darkgrey"
+            if(!full){
+                ele.style.backgroundColor="darkgrey"
+            }
         });
     }
+}
+
+function addText(circles,character,name){
+    //Name
+    circles[0].innerHTML=name;
+    if(character.characterType<2){
+        circles[0].style.color="blue"
+    }else{
+        circles[0].style.color="red"
+    }
+
+    //Script type
+    circles[1].innerHTML=getScript(character.originalScript);
+    //Character type
+    circles[2].innerHTML=getCharType(character.characterType);
+    //Wakes in night
+    circles[3].innerHTML=getWakesNight(character.wakesInNight);
+    //Selects Player
+    circles[4].innerHTML=getSelectsPlayer(character.selectsPlayer);
+    //Learns info
+    circles[5].innerHTML=getLearnsInfo(character.learnsInfo);
+    //Ability Details
+    let charAbilities=new Set(character.ability)
+    for (const value of charAbilities) {
+        circles[6].innerHTML+=getAbility(value)+", ";
+    }
+    circles[6].innerHTML=circles[6].innerHTML.slice(0,-2)
 }
 
 async function initialize(){
@@ -107,118 +135,79 @@ function decrypt(word){
 
 }
 
-function createGuess(name,character){
-    document.querySelector(".bigLabels").classList.remove("hide");
-    let correct=0;
-    guestCount++;
-    document.querySelector(".guessCount span").innerHTML=guestCount;
-    inputMain.value="";
-    
-    //Create circles
-    let node=document.importNode(template.content,true);
-    let circles=node.querySelectorAll(".icon");
-    guessContainer.prepend(node);
-
-    //Name
-    circles[0].innerHTML=name;
-    if(character.characterType<2){
-        circles[0].style.color="blue"
+function compareCircles(circle,character,checks){
+    if(checks[0]){
+        circle.classList.add("correct")
+        guessHistory.push("🟩")
+        return 1
+    }else if(checks[1]){
+        circle.classList.add("almost")
+        guessHistory.push("🟨")
     }else{
-        circles[0].style.color="red"
+        guessHistory.push("⬛")
     }
+    return 0
+}
+
+function validateGuess(circles,character,name){
+    let correct=0;
 
     //Script type
-    circles[1].innerHTML=getScript(character.originalScript);
-    if(character.originalScript==answer.originalScript){
-        circles[1].classList.add("correct")
-        correct++
-        guessHistory.push("🟩")
-    }else{
-        guessHistory.push("⬛")
-    }
+    let checks=[character.originalScript==answer.originalScript,false]
+    correct+=compareCircles(circles[1],character,checks)
 
     //Character type
-    circles[2].innerHTML=getCharType(character.characterType);
-   
-    if(character.characterType==answer.characterType){
-        circles[2].classList.add("correct")
-        correct++
-        guessHistory.push("🟩")
-    }else if(
+    checks=[character.characterType==answer.characterType,
     (character.characterType<2&&answer.characterType<2)||
-    (character.characterType>=2&&answer.characterType>=2)){
-        circles[2].classList.add("almost")
-        guessHistory.push("🟨")
-    }else{
-        guessHistory.push("⬛")
-    }
+    (character.characterType>=2&&answer.characterType>=2)]
+    
+    correct+=compareCircles(circles[2],character,checks)
 
     //Wakes in night
-    circles[3].innerHTML=getWakesNight(character.wakesInNight);
-    if(character.wakesInNight==answer.wakesInNight){
-        circles[3].classList.add("correct")
-        correct++
-        guessHistory.push("🟩")
-    }else if(wakesInNightMatch(character)){
-        circles[3].classList.add("almost");
-        guessHistory.push("🟨")
-    }else{
-        guessHistory.push("⬛")
-    }
-
-
+    checks=[character.wakesInNight==answer.wakesInNight,
+    wakesInNightMatch(character)]
+    correct+=compareCircles(circles[3],character,checks)
+    
     //Selects Player
-    circles[4].innerHTML=getSelectsPlayer(character.selectsPlayer);
-    if(character.selectsPlayer==answer.selectsPlayer){
-        circles[4].classList.add("correct")
-        correct++
-        guessHistory.push("🟩")
-    }else if(selectsPlayerMatch(character)){
-        circles[4].classList.add("almost");
-        guessHistory.push("🟨")
-    }else{
-        guessHistory.push("⬛")
-    }
+    checks=[character.selectsPlayer==answer.selectsPlayer,
+    selectsPlayerMatch(character)]
+    correct+=compareCircles(circles[4],character,checks)
 
     //Learns info
-    circles[5].innerHTML=getLearnsInfo(character.learnsInfo);
-    if(character.learnsInfo==answer.learnsInfo){
-        circles[5].classList.add("correct")
-        correct++
-        guessHistory.push("🟩")
-    }else{
-        guessHistory.push("⬛")
-    }
+    checks=[character.learnsInfo==answer.learnsInfo,false]
+    correct+=compareCircles(circles[5],character,checks)
 
     //Ability Details
     let charAbilities=new Set(character.ability)
     let answerAbilities=new Set(answer.ability)
-    for (const value of charAbilities) {
-        circles[6].innerHTML+=getAbility(value)+", ";
-    }
-    circles[6].innerHTML=circles[6].innerHTML.slice(0,-2)
-    
     let sameValues=charAbilities.intersection(answerAbilities)
-    if(areSetsEqual(charAbilities,answerAbilities)){
-        circles[6].classList.add("correct")
-        correct++
-        guessHistory.push("🟩")
-    }else if(sameValues.size!=0){
-        circles[6].classList.add("almost")
-        guessHistory.push("🟨")
-    }else{
-        guessHistory.push("⬛")
-    }
-    circles[6].innerHTML+=` [${sameValues.size}]`
+    
+    checks=[areSetsEqual(charAbilities,answerAbilities),sameValues.size!=0]
+    correct+=compareCircles(circles[6],character,checks)
 
-    //Apply animation delay
-    circles.forEach((ele,i)=>{
-        ele.style.animationDelay=i/10+"s";
-    });
+    circles[6].innerHTML+=` [${sameValues.size}]`
 
     if(correct==6){
         window.setTimeout(showWin,1000)
     }
+}
+
+function selectsPlayerMatch(character){
+    if(character.selectsPlayer==3||answer.selectsPlayer==3){
+        return false;
+    }
+    charIsNo=(character.selectsPlayer==0);
+    answerIsNo=(answer.selectsPlayer==0);
+    return charIsNo==answerIsNo
+}
+
+function wakesInNightMatch(character){
+    if(character.wakesInNight==5||answer.wakesInNight==5){
+        return false;
+    }
+    charIsNo=(character.wakesInNight==0);
+    answerIsNo=(answer.wakesInNight==0);
+    return charIsNo==answerIsNo
 }
 
 function showWin(){
@@ -263,41 +252,18 @@ async function copyToClipboard(text){
   }
 }
 
-function selectsPlayerMatch(character){
-    if(character.selectsPlayer==3||answer.selectsPlayer==3){
-        return false;
-    }
-    charIsNo=(character.selectsPlayer==0);
-    answerIsNo=(answer.selectsPlayer==0);
-    return charIsNo==answerIsNo
-}
-
-function wakesInNightMatch(character){
-    if(character.wakesInNight==5||answer.wakesInNight==5){
-        return false;
-    }
-    charIsNo=(character.wakesInNight==0);
-    answerIsNo=(answer.wakesInNight==0);
-    return charIsNo==answerIsNo
-}
-
 async function getJSONFile(input){
+    let response;
     try{
-    const response=await fetch(input);
-    const data=await response.text();
-    return JSON.parse(data);
+        response=await fetch(input);
+        const data=await response.text();
+        return JSON.parse(data);
     }catch{
-        alert("Failed to fetch input data!")
+        alert(`Failed to fetch input data! HTTP Error: ${response.status}`)
     }
    
 }
 
-//Converts string to title case
-function toTitleCase(str) {
-  return str.toLowerCase().replace(/(?:^|[\s-/])\w/g, function(match) {
-    return match.toUpperCase();
-  });
-}
 
 function getScript(input){
     switch(input){
