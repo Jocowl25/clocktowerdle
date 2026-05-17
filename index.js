@@ -6,6 +6,7 @@ const inputMain=document.querySelector("input.main")
 const inputTest=document.querySelector("input.test")
 const guessHistory=[];
 let answer;
+let answerName;
 let characterJSON;
 let previouslyGuessedSet=new Set();
 let previouslytestedSet=new Set();
@@ -70,8 +71,9 @@ document.querySelector(".fakeGuessSubmit").addEventListener("click",()=>{
 
 
 async function initialize(){
-    answer=(await getJSONFile("input.json")).current;
     characterJSON=(await getJSONFile("characters.json"));
+    answerName=(await getJSONFile("input.json")).current
+    answer=characterJSON[answerName];
 }
 
 function createGuess(name,character){
@@ -201,7 +203,7 @@ function showWin(){
 
     guestCount==1 ? endString="" : endString="es"
     endString=`${guestCount} guess${endString}`;
-    completeCont.querySelector("h2").innerHTML+=`${answer.name} in ${endString}!`;
+    completeCont.querySelector("h2").innerHTML+=`${answerName} in ${endString}!`;
 
     emojiDiv=completeCont.querySelector(".emoji");
     console.log(guessHistory)
