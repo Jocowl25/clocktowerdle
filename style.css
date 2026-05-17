@@ -148,7 +148,7 @@ Circle Template
 }
 
 .guess .name{
-    background-image: url("/token.webp");
+    background-image: url("token.webp");
     background-position: center;
     background-size: contain;
     border: none;
