@@ -11,7 +11,7 @@ let characterJSON;
 let previouslyGuessedSet=new Set();
 let previouslyTestedSet=new Set();
 
-let guestCount=0;
+let guessCount=0;
 initialize();
 
 const mod = (n, m) => ((n % m) + m) % m;
@@ -65,8 +65,10 @@ function createGuess(full){
         //Create circles
         let node=document.importNode(template.content,true);
         let circles=node.querySelectorAll(".icon");
+        if(guessCount==0){
+        document.querySelector(".bigLabels").classList.remove("hide");
+        }
         if(full){
-            document.querySelector(".bigLabels").classList.remove("hide");
             guessContainer.prepend(node);
         }else{
             fakeGuessContainer.prepend(node);
@@ -75,7 +77,7 @@ function createGuess(full){
         addText(circles,character,name)
 
         if(full){
-            guestCountSpan.innerHTML=++guestCount;
+            guestCountSpan.innerHTML=++guessCount;
             validateGuess(circles,character,name)
         }
 
@@ -221,8 +223,8 @@ function showWin(){
     completeCont.style.maxHeight="500px";
     completeCont.style.opacity="100%";
 
-    guestCount==1 ? endString="" : endString="es"
-    endString=`${guestCount} guess${endString}`;
+    guessCount==1 ? endString="" : endString="es"
+    endString=`${guessCount} guess${endString}`;
     completeCont.querySelector("h2").innerHTML+=`${answerName} in ${endString}!`;
 
     emojiDiv=completeCont.querySelector(".emoji");
