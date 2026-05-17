@@ -5,6 +5,8 @@ body{
     font-family: "Pirata One";
     padding-top:20px;
     background-image: url("parchment.webp");
+    margin-bottom:50px;
+    min-height:calc(100vh + 10px);
 }
 
 h1{
