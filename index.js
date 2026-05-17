@@ -72,7 +72,7 @@ document.querySelector(".fakeGuessSubmit").addEventListener("click",()=>{
 
 async function initialize(){
     characterJSON=(await getJSONFile("characters.json"));
-    answerName=(await getJSONFile("input.json")).current
+    answerName=(await getJSONFile("answer.json")).current
     answer=characterJSON[answerName];
 }
 
