@@ -1,11 +1,14 @@
 const template=document.querySelector("template");
 const guessContainer=document.querySelector('.guessContainer');
+const fakeGuessContainer=document.querySelector('.fakeGuessContainer');
 const guestCountSpan=document.querySelector(".guessCount span");
-const inputHTML=document.querySelector("input")
+const inputMain=document.querySelector("input.main")
+const inputTest=document.querySelector("input.test")
 const guessHistory=[];
 let answer;
 let characterJSON;
 let previouslyGuessedSet=new Set();
+let previouslytestedSet=new Set();
 
 let guestCount=0;
 initialize();
@@ -14,11 +17,54 @@ const areSetsEqual = (a, b) =>
   a.size === b.size && [...a].every(value => b.has(value));
 
 document.querySelector(".guessSubmit").addEventListener("click",()=>{
-    let name=toTitleCase(inputHTML.value);
-    console.log(name)
+    let name=toTitleCase(inputMain.value);
     if(name in characterJSON && !(previouslyGuessedSet.has(name))){
         previouslyGuessedSet.add(name)
         createGuess(name,characterJSON[name]);
+    }
+})
+
+document.querySelector(".fakeGuessSubmit").addEventListener("click",()=>{
+    let name=toTitleCase(inputTest.value);
+    if(name in characterJSON && !(previouslytestedSet.has(name))){
+        previouslytestedSet.add(name)
+        inputTest.value="";
+        character=characterJSON[name]
+
+        //Create circles
+        let node=document.importNode(template.content,true);
+        let circles=node.querySelectorAll(".icon");
+        fakeGuessContainer.prepend(node);
+
+        //Name
+        circles[0].innerHTML=name;
+        if(character.characterType<2){
+            circles[0].style.color="blue"
+        }else{
+            circles[0].style.color="red"
+        }
+
+        //Script type
+        circles[1].innerHTML=getScript(character.originalScript);
+        //Character type
+        circles[2].innerHTML=getCharType(character.characterType);
+        //Wakes in night
+        circles[3].innerHTML=getWakesNight(character.wakesInNight);
+        //Selects Player
+        circles[4].innerHTML=getSelectsPlayer(character.selectsPlayer);
+        //Learns info
+        circles[5].innerHTML=getLearnsInfo(character.learnsInfo);
+        //Ability Details
+        let charAbilities=new Set(character.ability)
+        for (const value of charAbilities) {
+            circles[6].innerHTML+=getAbility(value)+", ";
+        }
+        circles[6].innerHTML=circles[6].innerHTML.slice(0,-2)
+        //Apply animation delay + change circle color
+        circles.forEach((ele,i)=>{
+            ele.style.animationDelay=i/10+"s";
+            ele.style.backgroundColor="darkgrey"
+        });
     }
 })
 
@@ -29,10 +75,11 @@ async function initialize(){
 }
 
 function createGuess(name,character){
+    document.querySelector(".bigLabels").style.display="flex";
     let correct=0;
     guestCount++;
     document.querySelector(".guessCount span").innerHTML=guestCount;
-    inputHTML.value="";
+    inputMain.value="";
     
     //Create circles
     let node=document.importNode(template.content,true);
