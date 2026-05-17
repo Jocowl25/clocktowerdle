@@ -18,8 +18,8 @@ const areSetsEqual = (a, b) =>
   a.size === b.size && [...a].every(value => b.has(value));
 
 inputMain.addEventListener("keydown",(key)=>{
-    if(key="Enter"){
-        let name=toTitleCase(inputMain.value);
+    if(key=="Enter"){
+        let name=toTitleCase(inputMain.value).trim();
         if(name in characterJSON && !(previouslyGuessedSet.has(name))){
             previouslyGuessedSet.add(name)
             createGuess(name,characterJSON[name]);
@@ -28,7 +28,7 @@ inputMain.addEventListener("keydown",(key)=>{
 })
 
 document.querySelector(".guessSubmit").addEventListener("click",()=>{
-    let name=toTitleCase(inputMain.value);
+    let name=toTitleCase(inputMain.value).trim();
     if(name in characterJSON && !(previouslyGuessedSet.has(name))){
         previouslyGuessedSet.add(name)
         createGuess(name,characterJSON[name]);
@@ -37,14 +37,14 @@ document.querySelector(".guessSubmit").addEventListener("click",()=>{
 
 document.querySelector(".fakeGuessSubmit").addEventListener("click",testGuess)
 inputTest.addEventListener("keydown",(key)=>{
-    if(key="Enter"){
+    if(key=="Enter"){
         testGuess();
     }
 })
 
 
 function testGuess(){
-    let name=toTitleCase(inputTest.value);
+    let name=toTitleCase(inputTest.value).trim();
     if(name in characterJSON && !(previouslyTestedSet.has(name))){
         previouslyTestedSet.add(name)
         inputTest.value="";
