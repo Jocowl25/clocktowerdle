@@ -108,7 +108,7 @@ function decrypt(word){
 }
 
 function createGuess(name,character){
-    document.querySelector(".bigLabels").style.display="flex";
+    document.querySelector(".bigLabels").classList.remove("hide");
     let correct=0;
     guestCount++;
     document.querySelector(".guessCount span").innerHTML=guestCount;

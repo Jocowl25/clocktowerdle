@@ -86,8 +86,8 @@ input{
 }
 
 .bigLabels{
+    display: flex;
     width:min(1000px,100vw);
-    display: none;
     align-items: center;
     justify-content: center;
     padding:-5px;
@@ -95,6 +95,10 @@ input{
     margin-bottom: 10px;
     gap:2px;
     border-bottom: 2px solid black;
+}
+
+.hide{
+    display: none;
 }
 
 .header{
