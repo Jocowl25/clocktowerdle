@@ -14,6 +14,7 @@ let previouslyTestedSet=new Set();
 let guestCount=0;
 initialize();
 
+const mod = (n, m) => ((n % m) + m) % m;
 const areSetsEqual = (a, b) => 
   a.size === b.size && [...a].every(value => b.has(value));
 
@@ -89,8 +90,21 @@ function testGuess(){
 
 async function initialize(){
     characterJSON=(await getJSONFile("characters.json"));
-    answerName=(await getJSONFile("answer.json")).current
+    answerName=decrypt((await getJSONFile("answer.json")).current)
     answer=characterJSON[answerName];
+}
+
+function decrypt(word){
+    const alphabet="qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- ".split("")
+    const cShift=17
+    wordList=word.split("");
+    for(let i=0;i<wordList.length;++i){
+        letter=wordList[i]
+        oldIndex=alphabet.indexOf(letter)
+        wordList[i]=alphabet[mod((oldIndex-cShift),alphabet.length)]
+    }
+    return wordList.join("")
+
 }
 
 function createGuess(name,character){
