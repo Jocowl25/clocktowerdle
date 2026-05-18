@@ -24,21 +24,21 @@ nameSize=len(names)
 #load history
 inputJSON=json.loads(open("answer.json").read())
 history=inputJSON["history"]
-historyUnordered=set(history)
 
 #remove oldest member and add previous day's entry
-if(len(historyUnordered)>=nameSize//2):
+if(len(history)>=nameSize//2):
     history.pop()
-
 history.insert(0,ceasar(inputJSON["current"],True))
+
+historyUnordered=set(history)
+
 #loop until non-recent character is found
 newCurrentFound=False
 nextChar=""
 while(not newCurrentFound):
     randIndex=random.randint(0,nameSize-1)
     nextChar=names[randIndex]
-    if(not nextChar in historyUnordered):
-        newCurrentFound=True
+    newCurrentFound= (not nextChar in historyUnordered)
 
 updatedInputJSON= {
     "current":ceasar(nextChar),
