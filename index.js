@@ -146,8 +146,7 @@ function addText(circles,character,name){
     //Learns info
     circles[5].innerHTML=getLearnsInfo(character.learnsInfo);
     //Ability Details
-    let charAbilities=new Set(character.ability)
-    for (const value of charAbilities) {
+    for (const value of character.ability) {
         circles[6].innerHTML+=getAbility(value)+", ";
     }
     circles[6].innerHTML=circles[6].innerHTML.slice(0,-2)
