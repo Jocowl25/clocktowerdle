@@ -202,7 +202,7 @@ function validateGuess(circles,character,name){
     checks=[character.wakesInNight==answer.wakesInNight,
     (character.wakesInNight>0&&answer.wakesInNight>0)&&
     (character.wakesInNight<5&&answer.wakesInNight<5)]
-    
+
     correct+=compareCircles(circles[3],character,checks)
     
     //Selects Player
@@ -277,7 +277,7 @@ async function getJSONFile(input){
         const data=await response.text();
         return JSON.parse(data);
     }catch{
-        alert(`Failed to fetch input data! HTTP Error: ${response.status}`)
+        alert(`Failed to fetch ${input} data! HTTP Error: ${response.status}`)
     }
    
 }
