@@ -200,12 +200,16 @@ function validateGuess(circles,character,name){
 
     //Wakes in night
     checks=[character.wakesInNight==answer.wakesInNight,
-    wakesInNightMatch(character)]
+    (character.wakesInNight>0&&answer.wakesInNight>0)&&
+    (character.wakesInNight<5&&answer.wakesInNight<5)]
+    
     correct+=compareCircles(circles[3],character,checks)
     
     //Selects Player
     checks=[character.selectsPlayer==answer.selectsPlayer,
-    selectsPlayerMatch(character)]
+    (character.selectsPlayer>0&&answer.selectsPlayer>0)&&
+    (character.selectsPlayer<3&&answer.selectsPlayer<3)]
+
     correct+=compareCircles(circles[4],character,checks)
 
     //Learns info
@@ -223,24 +227,6 @@ function validateGuess(circles,character,name){
     circles[6].innerHTML+=` [${sameValues.size}]`
 
     return correct;
-}
-
-function selectsPlayerMatch(character){
-    if(character.selectsPlayer==3||answer.selectsPlayer==3){
-        return false;
-    }
-    charIsNo=(character.selectsPlayer==0);
-    answerIsNo=(answer.selectsPlayer==0);
-    return charIsNo==answerIsNo
-}
-
-function wakesInNightMatch(character){
-    if(character.wakesInNight==5||answer.wakesInNight==5){
-        return false;
-    }
-    charIsNo=(character.wakesInNight==0);
-    answerIsNo=(answer.wakesInNight==0);
-    return charIsNo==answerIsNo
 }
 
 function showWin(){
