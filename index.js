@@ -6,7 +6,7 @@ const inputMain=document.querySelector("input.main")
 const inputTest=document.querySelector("input.test")
 const colorHistory=[];
 let answer;
-let answerName;
+let fixedAnswerName;
 let characterJSON;
 let previouslyGuessedSet=new Set();
 let previouslyTestedSet=new Set();
@@ -18,15 +18,20 @@ initialize();
 
 async function initialize(){
     characterJSON=(await getJSONFile("characters.json"));
-    answerName=decrypt((await getJSONFile("answer.json")).current)
-    answer=characterJSON[answerName];
+    answerName=(await getJSONFile("answer.json")).current
+    fixedAnswerName=decrypt(answerName)
+    answer=characterJSON[fixedAnswerName];
     
     let localHistory=localStorage.getItem("history")
-    if(localHistory!=null){
+    let localCharacter=localStorage.getItem("character")
+    if(localHistory!=null&&localCharacter==answerName){
         characterHistory=localHistory.split(",");
         for(let i=0;i<characterHistory.length;++i){
             createGuess(true,characterHistory[i])
         }
+    }else if(localCharacter!=answerName){
+            localStorage.removeItem("history")
+            localStorage.setItem("character",answerName)
     }
 }
 
@@ -251,7 +256,7 @@ function showWin(){
 
     guessCount==1 ? endString="" : endString="es"
     endString=`${guessCount} guess${endString}`;
-    completeCont.querySelector("h2").innerHTML+=`${answerName} in ${endString}!`;
+    completeCont.querySelector("h2").innerHTML+=`${fixedAnswerName} in ${endString}!`;
 
     emojiDiv=completeCont.querySelector(".emoji");
     for(let i=0;i<colorHistory.length;i++){
