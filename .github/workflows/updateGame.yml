@@ -3,7 +3,6 @@
 on:
   schedule:
     - cron: '0 0 * * *' # At midnight
-      timezone: "America/New_York"
   workflow_dispatch:
 
 permissions:
