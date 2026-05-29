@@ -7,6 +7,7 @@ const inputTest=document.querySelector("input.test")
 const colorHistory=[];
 let answer;
 let fixedAnswerName;
+let updateTimestamp;
 let characterJSON;
 let previouslyGuessedSet=new Set();
 let previouslyTestedSet=new Set();
@@ -18,7 +19,9 @@ initialize();
 
 async function initialize(){
     characterJSON=(await getJSONFile("characters.json"));
-    answerName=(await getJSONFile("answer.json")).current
+    current=(await getJSONFile("answer.json")).current
+    answerName=current[0]
+    updateTimestamp=current[1]
     fixedAnswerName=decrypt(answerName)
     answer=characterJSON[fixedAnswerName];
     
@@ -256,7 +259,7 @@ function showWin(){
         let text=emojiDiv.innerHTML;
         text=text.replaceAll("<br>","\r\n")
         text=`🕰️🩸 I Guessed the Character in Clocktowerdle in ${endString}! 🩸🕰️\r\n`+text;
-        text+="\r\nhttps://jocowl25.github.io/clocktowerdle/";
+        text+="\r\nhttps://jocowl25.github.io/clocktowerdle/ "+updateTimestamp;
         copyToClipboard(text)
     })
 }

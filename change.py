@@ -1,5 +1,8 @@
 import random
 import json
+from datetime import date
+
+today = date.today()
 
 alphabet="qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- "
 cShift=17
@@ -28,7 +31,7 @@ history=inputJSON["history"]
 #remove oldest member and add previous day's entry
 if(len(history)>=nameSize//2):
     history.pop()
-history.insert(0,ceasar(inputJSON["current"],True))
+history.insert(0,ceasar(inputJSON["current"][0],True))
 
 historyUnordered=set(history)
 
@@ -41,7 +44,7 @@ while(not newCurrentFound):
     newCurrentFound= (not nextChar in historyUnordered)
 
 updatedInputJSON= {
-    "current":ceasar(nextChar),
+    "current":[ceasar(nextChar),f"{today:%m/%d/%Y}"],
     "history":history
 }
 
