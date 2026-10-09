@@ -1,9 +1,10 @@
 {
     "current": [
-        "-ncjtWY",
-        "10/08/2026"
+        "rmmH",
+        "10/09/2026"
     ],
     "history": [
+        "Pit Hag",
         "Wizard",
         "Shugenja",
         "Pixie",
@@ -71,7 +72,6 @@
         "Clockmaker",
         "Recluse",
         "Grandmother",
-        "Lunatic",
-        "Pacifist"
+        "Lunatic"
     ]
 }
