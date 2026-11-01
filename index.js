@@ -16,13 +16,32 @@ let guessCount=0;
 let characterHistory=[];
 initialize();
 
+function get_random_val() {
+  var date = Date.now();
+  var day = date / 60 / 60 / 24;
+  day = Math.floor(day);
+  random_val = day
+  random_val ^= (random_val << 13) & 0xffffffff;
+  random_val ^= (random_val >> 17) & 0xffffffff;
+  random_val ^= (random_val << 5) & 0xffffffff;
+  random_val &= 0xffffffff;
+  return random_val;
+}
+
+function get_todays_character() {
+  random_val = get_random_val()
+  character_id = (random_val% Object.keys(characterJSON).length+Object.keys(characterJSON).length) % Object.keys(characterJSON).length;
+  character = Object.keys(characterJSON)[character_id];
+  return character
+}
+
 
 async function initialize(){
-    characterJSON=(await getJSONFile("characters.json"));
-    current=(await getJSONFile("answer.json")).current
-    answerName=current[0]
-    updateTimestamp=current[1]
-    fixedAnswerName=decrypt(answerName)
+  characterJSON = (await getJSONFile("characters.json"));
+  
+  updateTimestamp = new Date().toISOString().split('T')[0]
+  answerName = get_random_val()
+    fixedAnswerName=get_todays_character()
     answer=characterJSON[fixedAnswerName];
     
     let localHistory=localStorage.getItem("history")
@@ -362,4 +381,3 @@ function getAbility(input){
         case 25:return "?";
     }
 }
-
